@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<style>
+  .boxedred {
+    color: red;
+    outline: 1px solid black;
+  }
+  .underblue {
+    color: blue;
+    text-decoration: underline;
+  }
+  /* we could use syntax similar to this to define parametrizable classes: */
+  /* .color(--c) {
+    color: var(--c);
+  } */
+</style>
+
+<!-- classes will be applied in the locally-specified order  -->
+<p 
+  data-style="
+    boxedred
+    underblue
+  "
+>
+  contents
+</p>
+
+<script>
+  const decorated = document.querySelectorAll("[data-style]")
+
+  const style = document.styleSheets.item(0)
+
+  const selectorToProps = new Map()
+  for (const r of style.cssRules) {
+    selectorToProps.set(r.selectorText, r.style.cssText)
+  }
+
+  for (const d of decorated) {
+    const deco = d.getAttribute('data-style')
+    const ds = deco.trim().split(/\s+/)
+    let style = ''
+    for (const d of ds) {
+      const s = selectorToProps.get('.' + d)
+      if (s) style += s
+    }
+    d.setAttribute('style', style)
+  }
+</script>

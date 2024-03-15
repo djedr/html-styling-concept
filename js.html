@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<script>
+  const color = c => e => {
+    e.style.color = c
+  }
+  const boxedred = e => {
+    e.style.color = 'red'
+    e.style.outline = '1px solid black'
+  }
+  const underblue = e => {
+    e.style.color = 'blue'
+    e.style.textDecoration = 'underline'
+  }
+</script>
+
+<!-- classes will be applied in the locally specified order; also demonstrating parametrizability -->
+<p 
+  data-style="boxedred, underblue, color('green')"
+>
+  contents
+</p>
+
+<script>
+  const jsed = document.querySelectorAll("[data-style]")
+
+  for (const d of jsed) {
+    const deco = d.getAttribute('data-style')
+
+    const evaled = eval?.('[' + deco + ']')
+    for (const f of evaled) {
+      f(d)
+    }
+  }
+</script>
